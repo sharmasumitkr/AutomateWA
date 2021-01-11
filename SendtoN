@@ -4,8 +4,12 @@ import time
 actualtime=time.localtime()         # to get local time of system
 hri=actualtime.tm_hour              # to get local time hour
 minu=actualtime.tm_min + 2          # to get local time next 2 minutes
-def increasemin():
-    global hri, minu
+messages = """Write SMS line
+by line
+"""
+
+def increasemin():                  #update minutes functions
+    global hri, minu                # access global message
     if(minu==59):
         if (hri==23):
             hri=0
@@ -16,10 +20,15 @@ def increasemin():
     minu=minu+1
 
 def main():
-    for i in range(64):
-        increasemin()
-        print(hri," ", minu)
-        #pywhatkit.sendwhatmsg(num, 'test5')
+    numbers='Number.txt'
+    global messages
+    with open(numbers) as fobj:                                         # open file to get numbers
+        try:
+            for num , mob in enumerate(fobj):
+                pywhatkit.sendwhatmsg(mob, messages, hri, minu)         # function to send whatsapp message
+                increasemin()
+        except Exception as e:
+            print(e)
 
 if __name__=='__main__':
     main()
